@@ -8,3 +8,4 @@ python-dateutil
 langchain-community
 python-dotenv
 langchain-openai
+langchain-huggingface
