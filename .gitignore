@@ -6,7 +6,6 @@
 .venv/
 .pyven/
 __pycache__/
-faiss_index/
 
 # VSCode
 .vscode/
