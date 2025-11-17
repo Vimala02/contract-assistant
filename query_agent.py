@@ -7,7 +7,8 @@ from typing import List, Optional
 
 from langchain_community.vectorstores import FAISS
 #from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_openai import OpenAI     # LLM
+#from langchain_openai import OpenAI     # LLM
+from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from agent_tools import (
@@ -52,7 +53,10 @@ def get_docs(query: str, k: int = 5, vendor: Optional[str] = None):
     # no vendor filter
     return vs.similarity_search(query, k=k)
 
-llm = OpenAI(temperature=0, model_name="gpt-4o")
+llm = ChatOpenAI(
+    model="gpt-4o",
+    temperature=0
+)
 
 
 def answer_query(query: str):
