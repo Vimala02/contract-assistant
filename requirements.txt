@@ -1,11 +1,11 @@
 langchain==0.1.20
-openai
+langchain-community
+langchain-openai
+langchain-huggingface
 faiss-cpu
+openai
 PyPDF2
 streamlit
 reportlab
 python-dateutil
-langchain-community
 python-dotenv
-langchain-openai
-langchain-huggingface
