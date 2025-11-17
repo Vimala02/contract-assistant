@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import re
 
 #Load environment variable
 load_dotenv()
@@ -12,6 +13,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
+def extract_vendor(text: str):
+    """Find a line like 'Vendor: Vendor X' and return the vendor name."""
+    m = re.search(r"Vendor:\s*(.+)", text)
+    if m:
+        return m.group(1).strip()
+    return None
+
 def load_pdfs(folder="sample_contracts"):
     docs = []
     for fname in os.listdir(folder):
@@ -20,8 +28,16 @@ def load_pdfs(folder="sample_contracts"):
         path = os.path.join(folder, fname)
         loader = PyPDFLoader(path)
         pages = loader.load_and_split()
+        vendor_name = None
+        if pages:
+            m = re.search(r"Vendor:\s*([A-Za-z0-9\s]+)", pages[0].page_content)
+            if m:
+                vendor_name = m.group(1).strip()
+
         for p in pages:
             p.metadata["source_file"] = fname
+            if vendor_name:
+                p.metadata["vendor"] = vendor_name
             docs.append(p)
     return docs
 

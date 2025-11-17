@@ -4,6 +4,7 @@ load_dotenv()  # loads OPENAI_API_KEY from .env
 from langchain_openai import OpenAI
 from dateutil import parser as dateparser
 import re
+import json
 
 # LLM will pick up API key from env
 llm = OpenAI(temperature=0, model_name="gpt-4o")
@@ -17,11 +18,18 @@ If nothing found, return an empty list.
 Text:
 {context}
 
-Output as JSON: {"sla_summary": ["..."]}
+Output as JSON: {{
+  "sla_summary": ["bullet 1", "bullet 2"]
+}}
+Return ONLY valid JSON.
 """
     context = "\n\n".join(texts)
-    res = llm.invoke(prompt.format(context=context))
-    return res
+    raw = llm.invoke(prompt.format(context=context))
+    try:
+        return json.loads(raw)
+    except Exception:
+        # If model returns something slightly off, just return raw text
+        return raw
 
 
 def extract_clauses_by_keyword(texts, keyword):
