@@ -2,13 +2,16 @@ from dotenv import load_dotenv
 load_dotenv()  # loads OPENAI_API_KEY from .env
 
 from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
+
 from dateutil import parser as dateparser
 import re
 import json
 
-# LLM will pick up API key from env
-llm = OpenAI(temperature=0, model_name="gpt-4o")
-
+llm = ChatOpenAI(
+    model="gpt-4o",
+    temperature=0
+)
 
 def summarize_sla(texts):
     prompt = """
